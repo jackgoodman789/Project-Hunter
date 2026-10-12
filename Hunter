@@ -1,0 +1,61 @@
+
+
+def product_info():
+    product_name = input("What is the product's name?: ")
+    product_location = input("Paste the URL here: ")
+    target_price = round(float(input("What price do you want it at?: ")), 2)
+    current_price = round(float(input("What is it currently at?: ")), 2)
+
+    product_data = {
+    "product name": product_name,
+    "product location": product_location,
+    "target price": target_price,
+    "current price": current_price
+}
+    return  product_data
+
+product_list = []
+
+while True:
+    product_data = product_info()
+    product_list.append(product_data)
+    while_true = True
+    while True:
+        another_product = input(f"Do you want to add another product(y/n)?: ")
+        if another_product == 'y':
+            print("Please add a product.")
+            break
+        elif another_product == 'n':
+            print("Finished.")
+            while_true = False
+            break
+        else:
+            print("Invalid input.")
+            continue
+    if while_true:
+        continue
+    else:
+        break
+
+
+for i in range(len(product_list)):
+    product_name = product_list[i]["product name"]
+    product_location = product_list[i]["product location"]
+    target_price = product_list[i]["target price"]
+    current_price = product_list[i]["current price"]
+    print(f"This is product {i+1}:")
+    print(f"Product Name: {product_name}")
+    print(f"Product Location: {product_location}")
+    print(f"Target Price: ${target_price:.2f}")
+    print(f"Current Price: ${current_price:.2f}")
+
+print("Hunter Price Tracker")
+
+
+
+
+    
+
+
+
+
