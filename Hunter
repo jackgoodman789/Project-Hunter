@@ -1,3 +1,22 @@
+import json
+from pathlib import Path
+project_folder = Path(__file__).parent
+json_file = project_folder / "products.json"
+try:
+    with open(json_file, "r") as file:
+        product_list = json.load(file)
+    print("List has successfully loaded")
+except FileNotFoundError:
+    print("Error: File not found")
+    product_list = []
+except json.JSONDecodeError:
+    print("Error: The file contains invalid JSON formatting.")
+    product_list = []
+# except Exception as e:
+#     print(f"An unexpect error occured: {e}")
+
+
+print("Hunter Price Tracker")
 
 
 def product_info():
@@ -14,42 +33,52 @@ def product_info():
 }
     return  product_data
 
-product_list = []
-
 while True:
-    product_data = product_info()
-    product_list.append(product_data)
-    while_true = True
-    while True:
-        another_product = input(f"Do you want to add another product(y/n)?: ")
-        if another_product == 'y':
-            print("Please add a product.")
-            break
-        elif another_product == 'n':
-            print("Finished.")
-            while_true = False
-            break
-        else:
-            print("Invalid input.")
-            continue
-    if while_true:
-        continue
-    else:
+    print("add- to add a product to the list")
+    print("list- to view list of known products")
+    print("exit- to exit the program")    
+    options = input("What do you want to do?: ")
+    if options == "add":
+        while True:
+            product_data = product_info()
+            product_list.append(product_data)
+            while_true = True
+            while True:
+                another_product = input(f"Do you want to add another product(y/n)?: ")
+                if another_product == 'y':
+                    print("Please add a product.")
+                    break
+                elif another_product == 'n':
+                    print("Finished.")
+                    while_true = False
+                    break
+                else:
+                    print("Invalid input.")
+                    continue
+            if while_true:
+                continue
+            else:
+                break
+
+        with open(json_file, "w") as file:
+            json.dump(product_list, file, indent=4)
+    elif options == "list":
+        for i in range(len(product_list)):
+            product_name = product_list[i]["product name"]
+            product_location = product_list[i]["product location"]
+            target_price = product_list[i]["target price"]
+            current_price = product_list[i]["current price"]
+            print(f"This is product {i+1}:")
+            print(f"Product Name: {product_name}")
+            print(f"Product Location: {product_location}")
+            print(f"Target Price: ${target_price:.2f}")
+            print(f"Current Price: ${current_price:.2f}")
+    elif options == "exit":
+        print("Goodbye")
         break
+    else:
+        print("Invalid command")
 
-
-for i in range(len(product_list)):
-    product_name = product_list[i]["product name"]
-    product_location = product_list[i]["product location"]
-    target_price = product_list[i]["target price"]
-    current_price = product_list[i]["current price"]
-    print(f"This is product {i+1}:")
-    print(f"Product Name: {product_name}")
-    print(f"Product Location: {product_location}")
-    print(f"Target Price: ${target_price:.2f}")
-    print(f"Current Price: ${current_price:.2f}")
-
-print("Hunter Price Tracker")
 
 
 
