@@ -1,5 +1,7 @@
 import json
 from pathlib import Path
+
+# Pulling info from .JSON file to be read for program
 project_folder = Path(__file__).parent
 json_file = project_folder / "products.json"
 try:
@@ -18,7 +20,7 @@ except json.JSONDecodeError:
 
 print("Hunter Price Tracker")
 
-
+# Function to input product information
 def product_info():
     product_name = input("What is the product's name?: ")
     product_location = input("Paste the URL here: ")
@@ -38,6 +40,7 @@ while True:
     print("list- to view list of known products")
     print("exit- to exit the program")    
     options = input("What do you want to do?: ")
+
     if options == "add":
         while True:
             product_data = product_info()
@@ -62,6 +65,8 @@ while True:
 
         with open(json_file, "w") as file:
             json.dump(product_list, file, indent=4)
+
+
     elif options == "list":
         for i in range(len(product_list)):
             product_name = product_list[i]["product name"]
@@ -73,9 +78,13 @@ while True:
             print(f"Product Location: {product_location}")
             print(f"Target Price: ${target_price:.2f}")
             print(f"Current Price: ${current_price:.2f}")
+
+
     elif options == "exit":
         print("Goodbye")
         break
+
+    
     else:
         print("Invalid command")
 
