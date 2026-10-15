@@ -37,6 +37,7 @@ def product_info():
 
 while True:
     print("add- to add a product to the list")
+    print("delete- to delete a product from the list")
     print("list- to view list of known products")
     print("exit- to exit the program")    
     options = input("What do you want to do?: ")
@@ -66,25 +67,93 @@ while True:
         with open(json_file, "w") as file:
             json.dump(product_list, file, indent=4)
 
+    elif options == "delete":
+        while True:
+            miss_input = input(f"Do you wish to continue to delete an product? (y/n): ")
+            if miss_input == 'y':
+                while True:
+                    for i in range(len(product_list)):
+                        potential_d = product_list[i]["product name"]
+                        print(f" {i+1}. {potential_d}")
+                    while_true = True
+                    if len(product_list) == 0:
+                        print("This is nothing to delete.")
+                        while_true = False
+                        break
+                    else:
+
+                        # To delete an item with confirmation
+                        while True:
+                            while True:
+                                delete_index = input(f"Which product number do you want to delete?: ")
+                                try:
+                                    delete_index = int(delete_index)
+                                    break
+                                except ValueError:
+                                    print("Invalid input. Please use numbers.")
+                            
+                            if delete_index > len(product_list):
+                                print("Invalid entry")
+                                continue
+                            elif delete_index < 1:
+                                print("Invalid entry")
+                                continue
+                            else:
+                                delete_index_name = product_list[delete_index-1]["product name"]
+                                confirmation = input(f"Are you sure you want to delete  (y/n)")
+                                if confirmation == 'y':
+                                    print(f"{delete_index}. {delete_index_name} has been deleted.")
+                                    product_list.pop(delete_index-1)
+                                    break
+                                elif confirmation == 'n':
+                                    break
+                                else:
+                                    print("Invalid answer")
+                            
+                        delete_again = input(f"Would you like to delete another product? (y/n): ")
+                        if delete_again == 'y':
+                            continue
+                        elif delete_again == 'n':
+                            while_true = False
+                            break
+                        else:
+                            print("Invalid answer")
+                            continue
+                if while_true:
+                    continue
+                else:
+                    break
+            elif miss_input == 'n':
+                break
+            else:
+                print("Miss input")
+                continue
+        with open(json_file, "w") as file:
+            json.dump(product_list, file, indent=4)
+
+
 
     elif options == "list":
-        for i in range(len(product_list)):
-            product_name = product_list[i]["product name"]
-            product_location = product_list[i]["product location"]
-            target_price = product_list[i]["target price"]
-            current_price = product_list[i]["current price"]
-            print(f"This is product {i+1}:")
-            print(f"Product Name: {product_name}")
-            print(f"Product Location: {product_location}")
-            print(f"Target Price: ${target_price:.2f}")
-            print(f"Current Price: ${current_price:.2f}")
+        if len(product_list) == 0:
+            print("There is nothing to list")
+        else:
+            for i in range(len(product_list)):
+                product_name = product_list[i]["product name"]
+                product_location = product_list[i]["product location"]
+                target_price = product_list[i]["target price"]
+                current_price = product_list[i]["current price"]
+                print(f"This is product {i+1}:")
+                print(f"Product Name: {product_name}")
+                print(f"Product Location: {product_location}")
+                print(f"Target Price: ${target_price:.2f}")
+                print(f"Current Price: ${current_price:.2f}")
 
 
     elif options == "exit":
         print("Goodbye")
         break
 
-    
+
     else:
         print("Invalid command")
 
