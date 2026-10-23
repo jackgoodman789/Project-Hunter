@@ -6,19 +6,22 @@ project_folder = Path(__file__).parent
 json_file = project_folder / "products.json"
 
 def load_products(json_file):
-    
     try:
         with open(json_file, "r") as file:
             product_list = json.load(file)
         print("List has successfully loaded")
+
     except FileNotFoundError:
         print("Error: File not found")
         product_list = []
+
     except json.JSONDecodeError:
         print("Error: The file contains invalid JSON formatting.")
         product_list = []
-        # except Exception as e:
-        #     print(f"An unexpect error occured: {e}")
+
+    # except Exception as e:
+    #     print(f"An unexpect error occured: {e}")
+
     return product_list
 
 # Pulling info from .JSON file to be read for program
@@ -28,13 +31,29 @@ def save_products(product_list, json_file):
 
 print("Hunter Price Tracker")
 
+def get_price(prompt):
+    while True:
+        Dollars = input(prompt)
+        
+        try:
+            Dollars = round(float(Dollars), 2)
+            break
+
+        except ValueError:
+            print("Invalid input. Please use numbers.")
+            continue
+    return Dollars
+
 # Function to input product information
 def product_info():
     product_name = input("What is the product's name?: ")
     product_location = input("Paste the URL here: ")
-    target_price = round(float(input("What price do you want it at?: ")), 2)
-    current_price = round(float(input("What is it currently at?: ")), 2)
+    target_price = get_price("What price do you want it at?: ")
+    current_price = get_price("What is it currently at?: ")
+    
+    
 
+    #Dictionary of a product 
     product_data = {
     "product name": product_name,
     "product location": product_location,
@@ -43,198 +62,142 @@ def product_info():
 }
     return  product_data
 
+def confirm(prompt):
+    while True:
+        answer = input(prompt)
+        if answer == "y":
+            return True
+        elif answer == "n":
+            return False
+        else:
+            print("Invalid answer")
+
+# To choose which product you want and testing to make sure its a number
+def get_product_index(prompt, product_list):
+    while True:
+        index = input(prompt)
+        try:
+            index = int(index)
+            
+        except ValueError:
+            print("Invalid input. Please use numbers.")
+            continue
+
+        if index < 1 or index > len(product_list):
+            print(f"There are only {len(product_list)} entries")
+            continue
+
+        else:
+            return index
+
+# to show a list of all the products names        
+def get_product_names(product_list):
+    for index, product in enumerate(product_list, start=1):
+        print(f"{index}. {product['product name']}")
+
+# Add products to the JSON list
 def add_products(product_list):
     while True:
         product_data = product_info()
         product_list.append(product_data)
-        while_true = True
-        while True:
-            another_product = input(f"Do you want to add another product(y/n)?: ")
-            if another_product == 'y':
-                print("Please add a product.")
-                break
-            elif another_product == 'n':
-                print("Finished.")
-                while_true = False
-                break
-            else:
-                print("Invalid input.")
-                continue
-        if while_true:
-            continue
-        else:
-            break
-
+        
+        if not confirm("Do you want to add another product(y/n)?: "):
+            return
+         
+# Edit products in JSON list
 def edit_products(product_list):
+    # Test to see if there is products in the list
     if len(product_list) == 0:
-        print("There is nothing to edit")
-    else:
-        while True:
-            for i in range(len(product_list)):
-                product_name = product_list[i]["product name"]
-                print(f"{i+1}. {product_name}")
-            while_true = True
-            # To choose which product you want to edit with testing to make sure its a number
-            while True:
-                edit_index = input(f"Which product number do you want to edit?: ")
-                try:
-                    edit_index = int(edit_index)
-                    break
-                except ValueError:
-                    print("Invalid input. Please use numbers.")
-
-            if edit_index > len(product_list):
-                print("Invalid number")
-                continue
-            elif edit_index < 1:
-                print("Invalid number")
-                continue
-            else:
-                # Edit products and ask if you want to edit more
-                while True:
-                    # to select and edit different info about products
-                    while True:
-                        print(f"Name: {product_list[edit_index-1]['product name']}")
-                        print(f"URL: {product_list[edit_index-1]['product location']}")
-                        print(f"Target Price: {product_list[edit_index-1]['target price']}")
-                        print(f"Current Price: {product_list[edit_index-1]['current price']}")
-                        edit_info = input(f"What info do you want to edit? ")
-
-                        if edit_info == 'name':
-                            new_value = input(f"What do you want for the new name to be? ")
-                            product_list[edit_index-1]["product name"] = new_value
-                            print(f"The new name is {product_list[edit_index-1]['product name']}")
-                            break
-
-                        elif edit_info == 'url':
-                            new_value = input(f"What do you want for the new URL to be? ")
-                            product_list[edit_index-1]["product location"] = new_value
-                            print(f"The new URL is {product_list[edit_index-1]['product location']}")
-                            break
-
-                        elif edit_info == 'target price':
-                            new_value = round(float(input(f"What do you want for the new target price to be? ")), 2)
-                            product_list[edit_index-1]["target price"] = new_value
-                            print(f"The new target price is {product_list[edit_index-1]['target price']}")
-                            break
-
-                        elif edit_info == 'current price':
-                            new_value = round(float(input(f"What do you want for the new current price to be? ")), 2)
-                            product_list[edit_index-1]["current price"] = new_value
-                            print(f"The new current price is {product_list[edit_index-1]['current price']}")
-                            break
-
-                        elif edit_info == 'none':
-                            break
-
-                        else:
-                            print("Miss input")
-                            continue
-                
-                    edit_again = input(f"Would you like to edit another product? (y/n): ")
-                    if edit_again == 'y':
-                        continue
-                    elif edit_again == 'n':
-                        while_true = False
-                        break
-                    else:
-                        print("Invalid answer")
-                        continue
-            if while_true:
-                continue
-            else:
-                break
-
-def delete_products(product_list):
+        print("There is nothing to edit\n")
+        return
     while True:
-        miss_input = input(f"Do you wish to continue to delete an product? (y/n): ")
-        if miss_input == 'y':
-            while True:
-                for i in range(len(product_list)):
-                    potential_d = product_list[i]["product name"]
-                    print(f" {i+1}. {potential_d}")
-                while_true = True
-                if len(product_list) == 0:
-                    print("This is nothing to delete.")
-                    while_true = False
-                    break
-                else:
+        get_product_names(product_list)
 
-                    # To delete an item with confirmation
-                    while True:
-                        #making sure delete index is an int
-                        while True:
-                            delete_index = input(f"Which product number do you want to delete?: ")
-                            try:
-                                delete_index = int(delete_index)
-                                break
-                            except ValueError:
-                                print("Invalid input. Please use numbers.")
-                        
-                        if delete_index > len(product_list):
-                            print("Invalid entry")
-                            continue
-                        elif delete_index < 1:
-                            print("Invalid entry")
-                            continue
-                        else:
-                            delete_index_name = product_list[delete_index-1]["product name"]
-                            confirmation = input(f"Are you sure you want to delete  (y/n)")
-                            if confirmation == 'y':
-                                print(f"{delete_index}. {delete_index_name} has been deleted.")
-                                product_list.pop(delete_index-1)
-                                break
-                            elif confirmation == 'n':
-                                break
-                            else:
-                                print("Invalid answer")
-                        
-                    delete_again = input(f"Would you like to delete another product? (y/n): ")
-                    if delete_again == 'y':
-                        continue
-                    elif delete_again == 'n':
-                        while_true = False
-                        break
-                    else:
-                        print("Invalid answer")
-                        continue
-            if while_true:
-                continue
-            else:
-                break
-        elif miss_input == 'n':
-            break
+        edit_index = get_product_index("Which product number do you want to edit?: ", product_list)
+        selected_product = product_list[edit_index-1]
+            
+        print(f"\nName: {selected_product['product name']}")
+        print(f"URL: {selected_product['product location']}")
+        print(f"Target Price: {selected_product['target price']}")
+        print(f"Current Price: {selected_product['current price']}")
+        edit_info = input(
+            "\nWhat info do you want to edit?\n"
+            f"Enter:name/url/target price/current price/none): "
+            )
+        
+        # Section to edit the info of a product
+        if edit_info == 'name':
+            selected_product["product name"] = input(f"What do you want for the new name to be? ")
+            print(f"The new name is {selected_product['product name']}\n")
+            
+        elif edit_info == 'url':
+            selected_product["product location"] = input(f"What do you want for the new URL to be? ")
+            print(f"The new URL is {selected_product['product location']}\n")
+            
+        elif edit_info == 'target price':
+            selected_product["target price"] = get_price(f"What do you want for the new target price to be? \n")
+            print(f"The new target price is {selected_product['target price']}")
+            
+        elif edit_info == 'current price':
+            selected_product["current price"] = get_price(f"What do you want for the new current price to be? \n")
+            print(f"The new current price is {selected_product['current price']}")
+            
+        elif edit_info == 'none':
+            pass
+
         else:
-            print("Miss input")
+            print("Invalid Option")
             continue
+                
+        if not confirm("Would you like to edit another product? (y/n): "):
+            return
+                    
+# To delete certian products in the list
+def delete_products(product_list):
+    if len(product_list) == 0:
+        print("This is nothing to delete.")
+        return
+    
+    if confirm("\nDo you wish to continue to delete an product? (y/n): "):
+        while True:
+            get_product_names(product_list)
+            
+            delete_index = get_product_index("Which product number do you want to delete?: ", product_list)
+            
+            delete_index_name = product_list[delete_index-1]["product name"]
+            
+            if confirm("\nAre you sure you want to delete  (y/n)"):
+                print(f"{delete_index}. {delete_index_name} has been deleted.")
+                product_list.pop(delete_index-1)
+                
+            if not confirm("\nWould you like to delete another product? (y/n): "):
+                return
+        
+        
 
 # Show the current list of all the products
 def list_products(product_list):
     if len(product_list) == 0:
-        print("There is nothing to list")
+        print("\nThere is nothing to list")
     else:
-        for i in range(len(product_list)):
-            product_name = product_list[i]["product name"]
-            product_location = product_list[i]["product location"]
-            target_price = product_list[i]["target price"]
-            current_price = product_list[i]["current price"]
-            print(f"This is product {i+1}:")
-            print(f"Product Name: {product_name}")
-            print(f"Product Location: {product_location}")
-            print(f"Target Price: ${target_price:.2f}")
-            print(f"Current Price: ${current_price:.2f}")
+        for index, product in enumerate(product_list, start=1):
+            print(f"\nThis is product {index}:")
+            print(f"Product Name: {product['product name']}")
+            print(f"Product Location: {product['product location']}")
+            print(f"Target Price: ${product['target price']:.2f}")
+            print(f"Current Price: ${product['current price']:.2f}")
 
 
 product_list = load_products(json_file)
 
 # Main HMI
 while True:
-    print("add- to add a product to the list")
+    print("\nadd- to add a product to the list")
     print("edit- to edit the current list")
     print("delete- to delete a product from the list")
     print("list- to view list of known products")
     print("exit- to exit the program")    
-    options = input("What do you want to do?: ")
+    options = input("What do you want to do?:\n")
 
 
     if options == "add":
@@ -252,11 +215,9 @@ while True:
     elif options == "list":
         list_products(product_list)
 
-
     elif options == "exit":
         print("Goodbye")
         break
-
 
     else:
         print("Invalid command")
