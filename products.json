@@ -1,20 +1,20 @@
 [
     {
-        "product name": "CPU",
+        "product name": "i5-8000",
         "product location": "https://www.amazon.com/Intel-i5-8500-Desktop-Processor-LGA1151/dp/B084F3K5FN/ref=sr_1_1?dib=eyJ2IjoiMSJ9.GmgJkjD8LqYNR3dZHmoRLfIvzWnm9R45g2-W8jn4FoKlHQhndbDEAQiU_hx574PlkbAKRCTM5rUBLSmO_j-Np_k_220k2eXIelzIHqSTvHqRi3mFXED3iigur-Z9EUGp15zurH9Cse3E4bhXcmFn8A6BNXE_WqyVUb76RojCJ-azi7887k5y3Ngk9fBQhH0_a6xOSaZJy_3FdisonUC3z9s0QXrA0-PujfxiuGFmdnFS6ApNYp3OBroNHMhaVH8v4B0mx_vQAT2zN4zgvrzNj6TtJNWx6jyX_zDi3y5Mxzs.6xBjCMT-H4xrE-dM2LduSyWKDDxHd_3gg8KeJiHP_eQ&dib_tag=se&keywords=Intel+i5-8500&qid=1791827189&s=electronics&sbo=GW1QB%2BmqAsHTPf1jTZRSDA%3D%3D&sr=1-1",
-        "target price": 42.0,
+        "target price": 45.0,
         "current price": 50.0
     },
     {
         "product name": "Motherboard",
         "product location": "https://www.amazon.com/MSI-H610M-G-Motherboard-Intel-Socket/dp/B09PX326Q8/ref=sr_1_1?crid=21YVZTS1Q80XB&dib=eyJ2IjoiMSJ9.HIOz6q80cPOmCrtP2grWKAjy7pZjRQ7p91V6GCtCZRL78K7wSqFJsiY9NWOeTZKJyXmH4QUstiPvVn9F0vN2qtS0gsrYW0Qd1bLKY3BPSTbq6J8iM2urk1_6dVKVqeo3FUzsHU5AqSqbllMB91DcV_661pK8Fii28lWI9enYzkZAggODWZRh6gtE7cxpDtWFmHbwJd3VvQsrT9rjFUZ0ONyM8iSbIelggDyn2D6ESWn6lgUXs2Dp3AqJVsrbLzYP3mneh72tbO4K5MHrBrb-u8yL26HpwXCCpgnG8dZfpIk.U96K0TDME6t-MvJTOl75qQPbaTjnZTeJq0_eZ21_43Q&dib_tag=se&keywords=6-SATA%2Bmotherboard&qid=1791828725&s=electronics&sprefix=6-sata%2Bmotherboard%2Celectronics%2C142&sr=1-1&th=1",
-        "target price": 85.0,
+        "target price": 80.0,
         "current price": 90.0
     },
     {
-        "product name": "HDD",
+        "product name": "Seagate",
         "product location": "https://www.amazon.com/dp/B07D961VDW?lv=shuf&channelId=500&plpRedirect=mhFallback",
-        "target price": 494.0,
-        "current price": 505.0
+        "target price": 472.0,
+        "current price": 479.0
     }
 ]
