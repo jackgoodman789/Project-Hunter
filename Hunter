@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-
+from datetime import date
 
 project_folder = Path(__file__).parent
 json_file = project_folder / "products.json"
@@ -33,32 +33,63 @@ print("Hunter Price Tracker")
 
 def get_price(prompt):
     while True:
-        Dollars = input(prompt)
+        dollars = input(prompt)
         
         try:
-            Dollars = round(float(Dollars), 2)
+            dollars = round(float(dollars), 2)
             break
 
         except ValueError:
             print("Invalid input. Please use numbers.")
             continue
-    return Dollars
+    return dollars
+
+def update_price(product_list):
+    if len(product_list) == 0:
+            print("There is nothing to update\n")
+            return
+    get_product_names(product_list)
+    today = date.today().isoformat()
+    
+  
+    selected_index = get_product_index(f"Which product do you want to update?: ", product_list)
+    update_index = product_list[selected_index-1]
+    print(f"Current Price: ${update_index['current price']}")
+    new_price = get_price(f"What is the new price?: ")
+
+    product_history = {
+        'date': today,
+        'price': new_price
+        }
+    update_index.setdefault('price history', [])
+    update_index['current price'] = new_price
+    update_index['last updated'] = today
+    update_index['price history'].append(product_history)
+    
+
 
 # Function to input product information
 def product_info():
+    today = date.today().isoformat()
     product_name = input("What is the product's name?: ")
     product_location = input("Paste the URL here: ")
     target_price = get_price("What price do you want it at?: ")
     current_price = get_price("What is it currently at?: ")
     
-    
-
     #Dictionary of a product 
     product_data = {
     "product name": product_name,
     "product location": product_location,
     "target price": target_price,
-    "current price": current_price
+    "current price": current_price,
+    "price history": [
+        {
+        'date': today,
+        'price': current_price
+        }
+    ],
+    "last updated": today
+
 }
     return  product_data
 
@@ -119,10 +150,10 @@ def edit_products(product_list):
         print(f"\nName: {selected_product['product name']}")
         print(f"URL: {selected_product['product location']}")
         print(f"Target Price: {selected_product['target price']}")
-        print(f"Current Price: {selected_product['current price']}")
+        
         edit_info = input(
             "\nWhat info do you want to edit?\n"
-            f"Enter:name/url/target price/current price/none): "
+            f"Enter:name/url/target price/none): "
             )
         
         # Section to edit the info of a product
@@ -138,10 +169,6 @@ def edit_products(product_list):
             selected_product["target price"] = get_price(f"What do you want for the new target price to be? \n")
             print(f"The new target price is {selected_product['target price']}")
             
-        elif edit_info == 'current price':
-            selected_product["current price"] = get_price(f"What do you want for the new current price to be? \n")
-            print(f"The new current price is {selected_product['current price']}")
-            
         elif edit_info == 'none':
             pass
 
@@ -155,23 +182,28 @@ def edit_products(product_list):
 # To delete certian products in the list
 def delete_products(product_list):
     if len(product_list) == 0:
-        print("This is nothing to delete.")
+        print("This list has nothing to delete.")
         return
     
-    if confirm("\nDo you wish to continue to delete an product? (y/n): "):
-        while True:
-            get_product_names(product_list)
-            
-            delete_index = get_product_index("Which product number do you want to delete?: ", product_list)
-            
-            delete_index_name = product_list[delete_index-1]["product name"]
-            
-            if confirm("\nAre you sure you want to delete  (y/n)"):
-                print(f"{delete_index}. {delete_index_name} has been deleted.")
-                product_list.pop(delete_index-1)
-                
-            if not confirm("\nWould you like to delete another product? (y/n): "):
-                return
+    if not confirm("\nDo you wish to delete an product? (y/n): "):
+        return
+    while True:
+        get_product_names(product_list)
+        
+        delete_index = get_product_index("Which product number do you want to delete?: ", product_list)
+        
+        delete_index_name = product_list[delete_index-1]["product name"]
+        
+        if confirm("\nAre you sure you want to delete  (y/n)"):
+            print(f"{delete_index}. {delete_index_name} has been deleted.")
+            product_list.pop(delete_index-1)
+
+        if len(product_list) == 0:
+            print("There are no products left.")
+            return
+        
+        if not confirm("\nWould you like to delete another product? (y/n): "):
+            return
         
         
 
@@ -187,6 +219,47 @@ def list_products(product_list):
             print(f"Target Price: ${product['target price']:.2f}")
             print(f"Current Price: ${product['current price']:.2f}")
 
+def show_price_history(product_list):
+    if len(product_list) == 0:
+        print("\nThere is nothing to list")
+    else:
+        while True:
+            get_product_names(product_list)
+            
+            history_index = get_product_index("Which product number do you want to view?: ", product_list)
+
+
+            history_dict = product_list[history_index-1]["price history"]
+
+            lowest_price=100000000000000000
+            highest_price = 0
+            sum_price = 0
+
+            for index, product in enumerate(history_dict, start=1):
+                price = product['price']
+                print(f"\nDate: {product['date']}")
+                print(f"Price: {price}")
+                if price < lowest_price:
+                    lowest_price = price
+                if price > highest_price:
+                    highest_price = price
+                sum_price += price
+
+            print(f"\nCurrent price: {price}")
+            print(f"The lowest price is: ${lowest_price}")
+            print(f"The highest price is: ${highest_price}")
+            print(f"The average price is: ${sum_price/index}")
+            print(f"How close to goal?: ${price-product_list[history_index-1]['target price']}")
+            if len(history_dict) >= 2:
+                old_price = history_dict[-2]['price']
+                percentage_change = (price-old_price)/old_price*100
+                print(f"Price change: {percentage_change: .2f}%")
+            else:
+                print("Not enough history")
+
+            if not confirm("\nWould you like to view the list another product? (y/n): "):
+                return
+
 
 product_list = load_products(json_file)
 
@@ -194,6 +267,7 @@ product_list = load_products(json_file)
 while True:
     print("\nadd- to add a product to the list")
     print("edit- to edit the current list")
+    print("update- add a new price entry to the list")
     print("delete- to delete a product from the list")
     print("list- to view list of known products")
     print("exit- to exit the program")    
@@ -204,16 +278,21 @@ while True:
         add_products(product_list)
         save_products(product_list, json_file)
 
-    elif options == "delete":
-        delete_products(product_list)
-        save_products(product_list, json_file)
-
     elif options == "edit":
         edit_products(product_list)
         save_products(product_list, json_file)
 
+    elif options == "update":
+        update_price(product_list)
+        save_products(product_list, json_file)
+
+    elif options == "delete":
+        delete_products(product_list)
+        save_products(product_list, json_file)
+
     elif options == "list":
         list_products(product_list)
+        show_price_history(product_list)
 
     elif options == "exit":
         print("Goodbye")
@@ -221,13 +300,3 @@ while True:
 
     else:
         print("Invalid command")
-
-
-
-
-
-    
-
-
-
-

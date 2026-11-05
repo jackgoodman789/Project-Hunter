@@ -15,6 +15,39 @@
         "product name": "Seagate",
         "product location": "https://www.amazon.com/dp/B07D961VDW?lv=shuf&channelId=500&plpRedirect=mhFallback",
         "target price": 472.0,
-        "current price": 479.0
+        "current price": 459.0,
+        "price history": [
+            {
+                "date": "2026-10-23",
+                "price": 479.0
+            },
+            {
+                "date": "2026-10-23",
+                "price": 505.0
+            },
+            {
+                "date": "2026-10-31",
+                "price": 459.0
+            }
+        ],
+        "date": "2026-10-23",
+        "last updated": "2026-10-31"
+    },
+    {
+        "product name": "test'",
+        "product location": "testing",
+        "target price": 50.0,
+        "current price": 90.0,
+        "price history": [
+            {
+                "date": "2026-10-31",
+                "price": 100.0
+            },
+            {
+                "date": "2026-10-31",
+                "price": 90.0
+            }
+        ],
+        "last updated": "2026-10-31"
     }
 ]
