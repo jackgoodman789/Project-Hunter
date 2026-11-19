@@ -29,7 +29,8 @@ def save_products(product_list, json_file):
     with open(json_file, "w") as file:
         json.dump(product_list, file, indent=4)
 
-print("Hunter Price Tracker")
+print("=== Project Hunter ===")
+print("Running from my OnePlus Pad 3!")
 
 def get_price(prompt):
     while True:
